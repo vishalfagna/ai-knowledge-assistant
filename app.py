@@ -11,9 +11,7 @@ from google import genai
 from google.genai import types
 
 
-# ----------------------------------
-# PAGE CONFIGURATION
-# ----------------------------------
+
 
 st.set_page_config(
     page_title="AI Knowledge Assistant",
@@ -32,27 +30,18 @@ st.title("🤖 AI Knowledge Assistant")
 st.write("Upload a PDF and ask questions using Google Gemini AI.")
 
 
-# ----------------------------------
-# LOAD EMBEDDING MODEL
-# ----------------------------------
 
 @st.cache_resource
 def load_embedding_model():
     return SentenceTransformer("all-MiniLM-L6-v2")
 
 
-# ----------------------------------
-# CHROMADB CLIENT
-# ----------------------------------
 
 @st.cache_resource
 def get_chroma_client():
     return chromadb.EphemeralClient()
 
 
-# ----------------------------------
-# PDF PROCESSING
-# ----------------------------------
 
 @st.cache_data
 def process_pdf(file_bytes):
@@ -92,9 +81,6 @@ def process_pdf(file_bytes):
     return total_pages, chunks
 
 
-# ----------------------------------
-# CREATE AND STORE EMBEDDINGS
-# ----------------------------------
 
 def create_vector_database(file_hash, chunks):
     model = load_embedding_model()
@@ -141,9 +127,6 @@ def create_vector_database(file_hash, chunks):
     return collection, model
 
 
-# ----------------------------------
-# SEMANTIC SEARCH
-# ----------------------------------
 
 def search_document(question, collection, model):
     question_embedding = model.encode(
@@ -163,9 +146,6 @@ def search_document(question, collection, model):
     return results
 
 
-# ----------------------------------
-# GEMINI AI ANSWER GENERATION
-# ----------------------------------
 
 def generate_ai_answer(question, results, chat_history=None):
     api_key = st.secrets["GEMINI_API_KEY"]
@@ -241,9 +221,6 @@ CURRENT USER QUESTION:
     return answer, sorted(set(source_pages))
 
 
-# ----------------------------------
-# STREAMLIT USER INTERFACE
-# ----------------------------------
 
 uploaded_file = st.file_uploader(
     "📄 Upload your PDF",
@@ -303,7 +280,7 @@ if uploaded_file is not None:
                 "Embeddings generated and stored successfully!"
             )
 
-            # Question input
+            
             
 
            
